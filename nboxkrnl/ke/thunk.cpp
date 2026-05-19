@@ -159,7 +159,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeRemoveEntryDeviceQueue),                // 0x0087 (135)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeRemoveQueue),                           // 0x0088 (136)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeRemoveQueueDpc),                        // 0x0089 (137)
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeResetEvent),                            // 0x008A (138)
+	(ULONG)FUNC(&KeResetEvent),                            // 0x008A (138)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeRestoreFloatingPointState),             // 0x008B (139)
 	(ULONG)FUNC(&KeResumeThread),                          // 0x008C (140)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeRundownQueue),                          // 0x008D (141)
