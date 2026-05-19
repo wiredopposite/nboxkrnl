@@ -167,7 +167,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeSetBasePriorityThread),                 // 0x008F (143)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeSetDisableBoostThread),                 // 0x0090 (144)
 	(ULONG)FUNC(&KeSetEvent),                              // 0x0091 (145)
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeSetEventBoostPriority),                 // 0x0092 (146)
+	(ULONG)FUNC(&KeSetEventBoostPriority),                 // 0x0092 (146)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeSetPriorityProcess),                    // 0x0093 (147)
 	(ULONG)FUNC(&KeSetPriorityThread),                     // 0x0094 (148)
 	(ULONG)FUNC(&KeSetTimer),                              // 0x0095 (149)

@@ -1,6 +1,7 @@
 /*
  * ergo720                Copyright (c) 2023
  * LukeUsher              Copyright (c) 2018
+ * wiredopposite          Copyright (c) 2026
  */
 
 #include "ke.hpp"
@@ -98,4 +99,33 @@ EXPORTNUM(145) LONG XBOXAPI KeSetEvent
 	}
 
 	return OldState;
+}
+
+EXPORTNUM(146) VOID XBOXAPI KeSetEventBoostPriority
+(
+    PKEVENT Event,
+    PKTHREAD *Thread
+)
+{
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	
+	if (!IsListEmpty(&Event->Header.WaitListHead)) {
+		PKWAIT_BLOCK WaitBlock = CONTAINING_RECORD(
+			Event->Header.WaitListHead.Flink, 
+			KWAIT_BLOCK, 
+			WaitListEntry);
+		PKTHREAD WaitThread = WaitBlock->Thread;
+		
+		if (Thread) {
+			*Thread = WaitThread;
+		}
+
+		WaitThread->Quantum = WaitThread->ApcState.Process->ThreadQuantum;
+		KiUnwaitThread(WaitThread, STATUS_SUCCESS, 1);
+	} 
+	else {
+		Event->Header.SignalState = 1;
+	}
+
+	KiUnlockDispatcherDatabase(OldIrql);
 }
