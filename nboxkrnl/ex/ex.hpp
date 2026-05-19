@@ -180,6 +180,25 @@ EXPORTNUM(18) DLLEXPORT VOID XBOXAPI ExInitializeReadWriteLock
 	PERWLOCK ReadWriteLock
 );
 
+EXPORTNUM(19) DLLEXPORT LARGE_INTEGER XBOXAPI ExInterlockedAddLargeInteger
+(
+	PLARGE_INTEGER Addend,
+	LARGE_INTEGER Increment
+);
+
+EXPORTNUM(20) DLLEXPORT VOID FASTCALL ExInterlockedAddLargeStatistic
+(
+    PLARGE_INTEGER Addend,
+    ULONG Increment
+);
+
+EXPORTNUM(21) DLLEXPORT LONGLONG FASTCALL ExInterlockedCompareExchange64
+(
+    LONGLONG volatile *Destination,
+    PLONGLONG Exchange,
+    PLONGLONG Comparand
+);
+
 EXPORTNUM(22) DLLEXPORT extern OBJECT_TYPE ExMutantObjectType;
 
 EXPORTNUM(23) DLLEXPORT ULONG XBOXAPI ExQueryPoolBlockSize
@@ -211,6 +230,23 @@ EXPORTNUM(28) DLLEXPORT VOID XBOXAPI ExReleaseReadWriteLock
 	PERWLOCK ReadWriteLock
 );
 
+EXPORTNUM(32) DLLEXPORT PLIST_ENTRY FASTCALL ExfInterlockedInsertHeadList
+(
+    PLIST_ENTRY ListHead,
+    PLIST_ENTRY ListEntry
+);
+
+EXPORTNUM(33) DLLEXPORT PLIST_ENTRY FASTCALL ExfInterlockedInsertTailList
+(
+    PLIST_ENTRY ListHead,
+    PLIST_ENTRY ListEntry
+);
+
+EXPORTNUM(34) DLLEXPORT PLIST_ENTRY FASTCALL ExfInterlockedRemoveHeadList
+(
+    PLIST_ENTRY ListHead
+);
+
 EXPORTNUM(51) DLLEXPORT LONG FASTCALL InterlockedCompareExchange
 (
 	volatile PLONG Destination,
@@ -232,6 +268,28 @@ EXPORTNUM(54) DLLEXPORT LONG FASTCALL InterlockedExchange
 (
 	volatile PLONG Destination,
 	LONG Value
+);
+
+EXPORTNUM(55) DLLEXPORT LONG FASTCALL InterlockedExchangeAdd
+(
+	volatile PLONG Addend,
+	LONG Increment
+);
+
+EXPORTNUM(56) DLLEXPORT PSINGLE_LIST_ENTRY FASTCALL InterlockedFlushSList
+(
+	PSLIST_HEADER ListHead
+);
+
+EXPORTNUM(57) DLLEXPORT PSINGLE_LIST_ENTRY FASTCALL InterlockedPopEntrySList
+(
+	PSLIST_HEADER ListHead
+);
+
+EXPORTNUM(58) DLLEXPORT PSINGLE_LIST_ENTRY FASTCALL InterlockedPushEntrySList
+(
+	PSLIST_HEADER ListHead,
+	PSINGLE_LIST_ENTRY ListEntry
 );
 
 #ifdef __cplusplus

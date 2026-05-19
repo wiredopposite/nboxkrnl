@@ -124,6 +124,165 @@ EXPORTNUM(24) NTSTATUS XBOXAPI ExQueryNonVolatileSetting
 	return Status;
 }
 
+EXPORTNUM(19) LARGE_INTEGER XBOXAPI ExInterlockedAddLargeInteger
+(
+	PLARGE_INTEGER Addend,
+	LARGE_INTEGER Increment
+)
+{
+	// clang-format off
+	__asm {
+		push ebp
+		mov ebp, esp
+		sub esp, 8
+
+		pushfd
+		cli
+
+		mov eax, dword ptr [ebp + 8]	// Addend pointer (1st stdcall arg)
+		mov ecx, dword ptr [eax]    	// old low
+		mov edx, dword ptr [eax + 4]	// old high
+		mov dword ptr [ebp - 8], ecx	// save old low
+		mov dword ptr [ebp - 4], edx	// save old high
+
+		add ecx, dword ptr [ebp + 12]	// + Increment.LowPart
+		adc edx, dword ptr [ebp + 16]	// + Increment.HighPart + carry
+
+		mov eax, dword ptr [ebp + 8]    // Addend pointer
+		mov dword ptr [eax], ecx
+		mov dword ptr [eax + 4], edx
+
+		popfd
+		mov eax, dword ptr [ebp - 8] 	// return low
+		mov edx, dword ptr [ebp - 4]	// return high
+		mov esp, ebp
+		pop ebp
+	}
+	// clang-format on
+}
+
+EXPORTNUM(20) VOID FASTCALL ExInterlockedAddLargeStatistic
+(
+    PLARGE_INTEGER Addend,
+    ULONG Increment
+)
+{
+	// clang-format off
+	__asm {
+		add dword ptr [ecx], edx
+		adc dword ptr [ecx + 4], 0
+	}
+	// clang-format on
+}
+
+EXPORTNUM(21) LONGLONG FASTCALL ExInterlockedCompareExchange64
+(
+    LONGLONG volatile *Destination,
+    PLONGLONG Exchange,
+    PLONGLONG Comparand
+)
+{
+	// clang-format off
+	__asm {
+		push ebx
+		push ebp
+
+		mov ebp, ecx 				   // Destination pointer
+		mov ebx, dword ptr [edx] 	   // Exchange low dword
+		mov ecx, dword ptr [edx + 4]   // Exchange.HighPart
+		mov edx, dword ptr [esp + 12]  // Comparand pointer (stack arg after pushes)
+		mov eax, dword ptr [edx]       // Comparand low dword
+		mov edx, dword ptr [edx + 4]   // Comparand high dword
+
+		cmpxchg8b qword ptr [ebp]
+
+		pop ebp
+		pop ebx
+	}
+	// clang-format on
+}
+
+EXPORTNUM(32) PLIST_ENTRY FASTCALL ExfInterlockedInsertHeadList
+(
+    PLIST_ENTRY ListHead,
+    PLIST_ENTRY ListEntry
+)
+{
+	// clang-format off
+	__asm {
+		pushfd
+		cli
+
+		mov eax, dword ptr [ecx + 0] // ListHead->Flink
+		mov dword ptr [edx + 0], eax // ListEntry->Flink = ListHead->Flink
+		mov dword ptr [edx + 4], ecx // ListEntry->Blink = ListHead
+		mov dword ptr [ecx + 0], edx // ListHead->Flink = ListEntry
+		mov dword ptr [eax + 4], edx // Old first entry's Blink = ListEntry
+
+		popfd
+
+		xor eax, ecx
+		jz done // empty, ret NULL
+
+		xor eax, ecx
+	done:
+	}
+	// clang-format on
+}
+
+EXPORTNUM(33) PLIST_ENTRY FASTCALL ExfInterlockedInsertTailList
+(
+    PLIST_ENTRY ListHead,
+    PLIST_ENTRY ListEntry
+)
+{
+	// clang-format off
+	__asm {
+		pushfd
+		cli
+
+		mov eax, dword ptr [ecx + 4] // ListHead->Blink
+		mov dword ptr [edx + 0], ecx // ListEntry->Flink = ListHead
+		mov dword ptr [edx + 4], eax // ListEntry->Blink = ListHead->Blink
+		mov dword ptr [ecx + 4], edx // ListHead->Blink = ListEntry
+		mov dword ptr [eax + 0], edx // Old last entry's Flink = ListEntry
+
+		popfd
+
+		xor eax, ecx
+		jz done // empty, ret NULL
+
+		xor eax, ecx
+	done:
+	}
+	// clang-format on
+}
+
+EXPORTNUM(34) PLIST_ENTRY FASTCALL ExfInterlockedRemoveHeadList
+(
+    PLIST_ENTRY ListHead
+)
+{
+	// clang-format off
+	__asm {
+		pushfd
+		cli
+
+		mov eax, dword ptr [ecx + 0] // ListHead->Flink
+		cmp eax, ecx			     // Is the list empty (ListHead->Flink == ListHead) ?
+		jz done
+
+		mov edx, dword ptr [eax + 0] // NextEntry = Old first entry's Flink
+		mov dword ptr [ecx + 0], edx // ListHead->Flink = NextEntry
+		mov dword ptr [edx + 4], ecx // NextEntry->Blink = ListHead
+	
+	done:
+		popfd
+		xor eax, eax
+	}
+	// clang-format on
+}
+
 EXPORTNUM(51) LONG FASTCALL InterlockedCompareExchange
 (
 	volatile PLONG Destination,
@@ -178,5 +337,108 @@ EXPORTNUM(54) LONG FASTCALL InterlockedExchange
 		mov eax, Value
 		xchg [ecx], eax
 	}
+	// clang-format on
+}
+
+EXPORTNUM(55) LONG FASTCALL InterlockedExchangeAdd
+(
+	volatile PLONG Addend,
+	LONG Increment
+)
+{
+	// clang-format off
+    __asm {
+        xadd dword ptr [ecx], edx
+        mov eax, edx
+    }
+	// clang-format on
+}
+
+EXPORTNUM(56) PSINGLE_LIST_ENTRY FASTCALL InterlockedFlushSList
+(
+	PSLIST_HEADER ListHead
+)
+{
+	// clang-format off
+    __asm {
+        push ebx
+		push ebp
+		mov ebp, ecx // ListHead
+		mov edx, dword ptr [ebp + 4]
+        mov eax, dword ptr [ebp] // ListHead->Next
+
+	retry:
+		or eax, eax
+		jz done
+
+		mov ecx, 0
+		mov ebx, 0
+		cmpxchg8b qword ptr [ebp]
+		jnz retry
+
+	done:
+		pop ebp
+		pop ebx
+    }
+	// clang-format on
+}
+
+EXPORTNUM(57) PSINGLE_LIST_ENTRY FASTCALL InterlockedPopEntrySList
+(
+	PSLIST_HEADER ListHead
+)
+{
+	// clang-format off
+    __asm {
+		push ebx
+		push ebp
+
+		mov ebp, ecx // ListHead
+		mov edx, dword ptr [ebp + 4]
+		mov eax, dword ptr [ebp] // ListHead->Next
+
+	retry:
+		or eax, eax
+		jz done // List is empty
+
+		mov ecx, edx
+		add ecx, 0xffff
+		mov ebx, dword ptr [eax] // NextEntry
+		cmpxchg8b qword ptr [ebp]
+		jnz retry
+
+	done:
+		pop ebp
+		pop ebx
+    }
+	// clang-format on
+}
+
+EXPORTNUM(58) PSINGLE_LIST_ENTRY FASTCALL InterlockedPushEntrySList
+(
+	PSLIST_HEADER ListHead,
+	PSINGLE_LIST_ENTRY ListEntry
+)
+{
+	// clang-format off
+    __asm {
+		push ebx
+		push ebp
+
+		mov ebp, ecx 				 // ListHead
+		mov ebx, edx 				 // ListEntry pointer
+		mov ebx, dword ptr [ebp + 4] // Current SLIST_HEADER high dword (Depth|Sequence)
+		mov eax, dword ptr [ebp] 	 // Current list head pointer (SLIST_HEADER.Next)
+
+	retry:
+		mov dword ptr [ebx], eax
+		mov ecx, edx
+		add ecx, 0x00010001
+		cmpxchg8b qword ptr [ebp]
+		jnz retry
+
+	    pop ebp
+		pop ebx
+    }
 	// clang-format on
 }

@@ -56,6 +56,7 @@ using PWCHAR = WCHAR *;
 using PWSTR = PWCHAR;
 using PUSHORT = USHORT *;
 using PULONG = ULONG *;
+using PLONGLONG = LONGLONG *;
 using PULONGLONG = ULONGLONG *;
 using LPDWORD = DWORD *;
 using PUCHAR = UCHAR *;
