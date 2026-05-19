@@ -144,7 +144,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)VARIABLE(&KeInterruptTime),                     // 0x0078 (120) KeInterruptTime
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeIsExecutingDpc),                        // 0x0079 (121)
 	(ULONG)FUNC(&KeLeaveCriticalRegion),                   // 0x007A (122)
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KePulseEvent),                            // 0x007B (123)
+	(ULONG)FUNC(&KePulseEvent),                            // 0x007B (123)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeQueryBasePriorityThread),               // 0x007C (124)
 	(ULONG)FUNC(&KeQueryInterruptTime),                    // 0x007D (125)
 	(ULONG)FUNC(&KeQueryPerformanceCounter),               // 0x007E (126)

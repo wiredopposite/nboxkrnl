@@ -58,3 +58,32 @@ EXPORTNUM(145) LONG XBOXAPI KeSetEvent
 
 	return OldState;
 }
+
+EXPORTNUM(123) LONG XBOXAPI KePulseEvent
+(
+    PKEVENT Event,
+    KPRIORITY Increment,
+    BOOLEAN Wait
+)
+{
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	LONG OldState = Event->Header.SignalState;
+
+	if (!OldState && !IsListEmpty(&Event->Header.WaitListHead)) {
+		Event->Header.SignalState = 1;
+		KiWaitTest(Event, Increment);
+	}
+
+	Event->Header.SignalState = 0;
+
+	if (!Wait) {
+		KiUnlockDispatcherDatabase(OldIrql);
+	}
+	else {
+		PKTHREAD Thread = KeGetCurrentThread();
+		Thread->WaitIrql = OldIrql;
+		Thread->WaitNext = Wait;
+	}
+
+	return OldState;
+}
