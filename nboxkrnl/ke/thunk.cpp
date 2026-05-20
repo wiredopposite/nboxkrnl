@@ -283,7 +283,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)VARIABLE(&PsThreadObjectType),                  // 0x0103 (259)
 	(ULONG)FUNC(&RtlAnsiStringToUnicodeString),            // 0x0104 (260)
 	(ULONG)FUNC(&RtlAppendStringToString),                 // 0x0105 (261)
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&RtlAppendUnicodeStringToString),          // 0x0106 (262)
+	(ULONG)FUNC(&RtlAppendUnicodeStringToString),          // 0x0106 (262)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&RtlAppendUnicodeToString),                // 0x0107 (263)
 	(ULONG)FUNC(&RtlAssert),                               // 0x0108 (264)
 	(ULONG)FUNC(&RtlCaptureContext),                       // 0x0109 (265)
