@@ -12,6 +12,14 @@
 extern "C" {
 #endif
 
+struct EVENT_BASIC_INFORMATION {
+    EVENT_TYPE EventType;
+    LONG EventState;
+};
+using PEVENT_BASIC_INFORMATION = EVENT_BASIC_INFORMATION *;
+
+static_assert(sizeof(EVENT_BASIC_INFORMATION) == 8);
+
 EXPORTNUM(184) DLLEXPORT NTSTATUS XBOXAPI NtAllocateVirtualMemory
 (
 	PVOID *BaseAddress,
@@ -19,6 +27,11 @@ EXPORTNUM(184) DLLEXPORT NTSTATUS XBOXAPI NtAllocateVirtualMemory
 	PULONG AllocationSize,
 	DWORD AllocationType,
 	DWORD Protect
+);
+
+EXPORTNUM(186) DLLEXPORT NTSTATUS XBOXAPI NtClearEvent
+(
+    HANDLE EventHandle
 );
 
 EXPORTNUM(187) DLLEXPORT NTSTATUS XBOXAPI NtClose
@@ -30,6 +43,14 @@ EXPORTNUM(188) DLLEXPORT NTSTATUS XBOXAPI NtCreateDirectoryObject
 (
 	PHANDLE DirectoryHandle,
 	POBJECT_ATTRIBUTES ObjectAttributes
+);
+
+EXPORTNUM(189) DLLEXPORT NTSTATUS XBOXAPI NtCreateEvent
+(
+    PHANDLE EventHandle,
+    POBJECT_ATTRIBUTES ObjectAttributes,
+    EVENT_TYPE EventType,
+    BOOLEAN InitialState
 );
 
 EXPORTNUM(190) DLLEXPORT NTSTATUS XBOXAPI NtCreateFile
@@ -97,6 +118,18 @@ EXPORTNUM(204) DLLEXPORT NTSTATUS XBOXAPI NtProtectVirtualMemory
 	PULONG OldProtect
 );
 
+EXPORTNUM(205) DLLEXPORT NTSTATUS XBOXAPI NtPulseEvent
+(
+    HANDLE EventHandle,
+    PLONG PreviousState
+);
+
+EXPORTNUM(209) DLLEXPORT NTSTATUS XBOXAPI NtQueryEvent
+(
+    HANDLE EventHandle,
+    PEVENT_BASIC_INFORMATION EventInformation
+);
+
 EXPORTNUM(211) DLLEXPORT NTSTATUS XBOXAPI NtQueryInformationFile
 (
 	HANDLE FileHandle,
@@ -131,6 +164,12 @@ EXPORTNUM(221) DLLEXPORT NTSTATUS XBOXAPI NtReleaseMutant
 (
 	HANDLE MutantHandle,
 	PLONG PreviousCount
+);
+
+EXPORTNUM(225) DLLEXPORT NTSTATUS XBOXAPI NtSetEvent
+(
+    HANDLE EventHandle,
+    PLONG PreviousState
 );
 
 EXPORTNUM(232) DLLEXPORT VOID XBOXAPI NtUserIoApcDispatcher
