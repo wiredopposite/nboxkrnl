@@ -115,7 +115,7 @@ EXPORTNUM(146) VOID XBOXAPI KeSetEventBoostPriority
 			KWAIT_BLOCK, 
 			WaitListEntry);
 		PKTHREAD WaitThread = WaitBlock->Thread;
-		
+
 		if (Thread) {
 			*Thread = WaitThread;
 		}
@@ -128,4 +128,9 @@ EXPORTNUM(146) VOID XBOXAPI KeSetEventBoostPriority
 	}
 
 	KiUnlockDispatcherDatabase(OldIrql);
+}
+
+VOID KeClearEvent(PKEVENT Event)
+{
+	Event->Header.SignalState = 0;
 }

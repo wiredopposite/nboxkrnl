@@ -709,4 +709,6 @@ VOID KeScheduleThread(PKTHREAD Thread);
 VOID KiScheduleThread(PKTHREAD Thread);
 VOID FASTCALL KeAddThreadToTailOfReadyList(PKTHREAD Thread);
 
+VOID KeClearEvent(PKEVENT Event);
+
 [[noreturn]] VOID CDECL KeBugCheckLogEip(ULONG BugCheckCode);
