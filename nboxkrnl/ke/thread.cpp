@@ -494,3 +494,57 @@ EXPORTNUM(155) BOOLEAN XBOXAPI KeTestAlertThread
 
 	return FALSE;
 }
+
+VOID FASTCALL KiReadyThread
+(
+	PKTHREAD Thread
+)
+{
+	while (TRUE) {
+		const BOOLEAN Preempted = Thread->Preempted;
+		const KPRIORITY Priority = Thread->Priority;
+
+		Thread->Preempted = FALSE;
+		Thread->WaitTime = KeTickCount;
+
+		if (KiIdleThreadMask) {
+			KiIdleThreadMask = 0;
+			KiPcr.PrcbData.NextThread = Thread;
+			Thread->State = Standby;
+			return;
+		}
+
+		PKTHREAD NextThread = KiPcr.PrcbData.NextThread;
+		if (NextThread == nullptr) {
+			PKTHREAD CurrentThread = KiPcr.PrcbData.CurrentThread;
+			if (Priority > CurrentThread->Priority) {
+				CurrentThread->Preempted = TRUE;
+				KiPcr.PrcbData.NextThread = Thread;
+				Thread->State = Standby;
+				return;
+			}
+		}
+		else {
+			if (Priority > NextThread->Priority) {
+				NextThread->Preempted = TRUE;
+				KiPcr.PrcbData.NextThread = Thread;
+				Thread->State = Standby;
+
+				// Continue scheduling the displaced standby thread.
+				Thread = NextThread;
+				continue;
+			}
+		}
+
+		Thread->State = Ready;
+		if (Preempted) {
+			InsertHeadList(&KiReadyThreadLists[Priority], &Thread->WaitListEntry);
+		}
+		else {
+			InsertTailList(&KiReadyThreadLists[Priority], &Thread->WaitListEntry);
+		}
+
+		KiReadyThreadMask |= (1u << Priority);
+		return;
+	}
+}

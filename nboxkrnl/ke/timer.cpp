@@ -245,6 +245,20 @@ VOID KiTimerListExpire(PLIST_ENTRY ExpiredListHead, KIRQL OldIrql)
 	}
 }
 
+EXPORTNUM(97) BOOLEAN XBOXAPI KeCancelTimer
+(
+    PKTIMER Timer
+)
+{
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	BOOLEAN Inserted = Timer->Header.Inserted;
+	if (Inserted) {
+		KiRemoveTimer(Timer);
+	}
+	KiUnlockDispatcherDatabase(OldIrql);
+	return Inserted;
+}
+
 // Source: Cxbx-Reloaded
 EXPORTNUM(113) VOID XBOXAPI KeInitializeTimerEx
 (
