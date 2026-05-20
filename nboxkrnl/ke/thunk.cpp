@@ -246,7 +246,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtReleaseSemaphore),                      // 0x00DE (222)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtRemoveIoCompletion),                    // 0x00DF (223)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtResumeThread),                          // 0x00E0 (224)
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtSetEvent),                              // 0x00E1 (225)
+	(ULONG)FUNC(&NtSetEvent),                              // 0x00E1 (225)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtSetInformationFile),                    // 0x00E2 (226)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtSetIoCompletion),                       // 0x00E3 (227)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&NtSetSystemTime),                         // 0x00E4 (228)
