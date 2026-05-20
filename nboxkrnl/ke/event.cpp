@@ -110,10 +110,7 @@ EXPORTNUM(146) VOID XBOXAPI KeSetEventBoostPriority
 	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
 	
 	if (!IsListEmpty(&Event->Header.WaitListHead)) {
-		PKWAIT_BLOCK WaitBlock = CONTAINING_RECORD(
-			Event->Header.WaitListHead.Flink, 
-			KWAIT_BLOCK, 
-			WaitListEntry);
+		PKWAIT_BLOCK WaitBlock = CONTAINING_RECORD(Event->Header.WaitListHead.Flink, KWAIT_BLOCK, WaitListEntry);
 		PKTHREAD WaitThread = WaitBlock->Thread;
 
 		if (Thread) {
