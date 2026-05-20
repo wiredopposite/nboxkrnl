@@ -138,6 +138,8 @@ inline LIST_ENTRY KiReadyThreadLists[NUM_OF_THREAD_PRIORITIES];
 // Bitmask of KiReadyThreadLists -> bit position is one if there is at least one ready thread at that priority
 inline DWORD KiReadyThreadMask = 0;
 
+inline DWORD KiIdleThreadMask = 0;
+
 inline LIST_ENTRY KiWaitInListHead;
 
 inline LIST_ENTRY KiTimerTableListHead[TIMER_TABLE_SIZE];
@@ -165,6 +167,7 @@ VOID XBOXAPI KiExecuteDpcQueue();
 PKTHREAD XBOXAPI KiQuantumEnd();
 VOID KiAdjustQuantumThread();
 NTSTATUS XBOXAPI KiSwapThread();
+VOID FASTCALL KiReadyThread(PKTHREAD Thread);
 
 VOID KiInitializeProcess(PKPROCESS Process, KPRIORITY BasePriority, LONG ThreadQuantum);
 
@@ -179,3 +182,5 @@ VOID KiTimerListExpire(PLIST_ENTRY ExpiredListHead, KIRQL OldIrql);
 
 VOID KiWaitTest(PVOID Object, KPRIORITY Increment);
 VOID KiUnwaitThread(PKTHREAD Thread, LONG_PTR WaitStatus, KPRIORITY Increment);
+
+LONG FASTCALL KiInsertQueue(PKQUEUE Queue, PLIST_ENTRY Entry, BOOLEAN InsertHead);

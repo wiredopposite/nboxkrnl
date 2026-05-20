@@ -181,11 +181,16 @@ VOID KiInitializeKernel()
 
 	KiIdleThread.Priority = LOW_PRIORITY;
 	KiIdleThread.State = Running;
-	KiIdleThread.WaitIrql = PASSIVE_LEVEL;
+	KiIdleThread.WaitIrql = DISPATCH_LEVEL;
 
 	KiPcr.Prcb->NpxThread = nullptr;
 	KiPcr.Prcb->NextThread = nullptr;
 	KiPcr.Prcb->IdleThread = &KiIdleThread;
+
+	// KiIdleThreadMask is the scheduler equivalent of KiIdleSummary for this tree.
+	if (KiPcr.Prcb->NextThread == nullptr) {
+		KiIdleThreadMask |= 1u;
+	}
 
 	if (MmInitSystem() == FALSE) {
 		KeBugCheckEx(INIT_FAILURE, MM_FAILURE, 0, 0, 0);
