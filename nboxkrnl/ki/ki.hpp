@@ -182,5 +182,6 @@ VOID KiTimerListExpire(PLIST_ENTRY ExpiredListHead, KIRQL OldIrql);
 
 VOID KiWaitTest(PVOID Object, KPRIORITY Increment);
 VOID KiUnwaitThread(PKTHREAD Thread, LONG_PTR WaitStatus, KPRIORITY Increment);
+VOID KiActivateQueueWaiter(PKQUEUE Queue);
 
 LONG FASTCALL KiInsertQueue(PKQUEUE Queue, PLIST_ENTRY Entry, BOOLEAN InsertHead);
