@@ -121,6 +121,54 @@ EXPORTNUM(290) VOID XBOXAPI RtlInitUnicodeString
 	}
 }
 
+EXPORTNUM(361) DLLEXPORT VOID CDECL RtlSnprintf
+(
+    CHAR * Buffer,
+    SIZE_T Size,
+    const CHAR * Format,
+    ...
+)
+{
+	va_list Args;
+	va_start(Args, Format);
+	npf_vsnprintf(Buffer, Size, Format, Args);
+	va_end(Args);
+}
+
+EXPORTNUM(362) DLLEXPORT VOID CDECL RtlSprintf
+(
+    CHAR * Buffer,
+    const CHAR * Format,
+    ...
+)
+{
+	va_list Args;
+	va_start(Args, Format);
+	npf_vsnprintf(Buffer, (SIZE_T)~0U, Format, Args);
+	va_end(Args);
+}
+
+EXPORTNUM(363) DLLEXPORT VOID CDECL RtlVsnprintf
+(
+    CHAR * Buffer,
+    SIZE_T Size,
+    const CHAR * Format,
+    va_list Args
+)
+{
+	npf_vsnprintf(Buffer, Size, Format, Args);
+}
+
+EXPORTNUM(364) DLLEXPORT VOID CDECL RtlVsprintf
+(
+    CHAR * Buffer,
+    const CHAR * Format,
+    va_list Args
+)
+{
+	npf_vsnprintf(Buffer, (SIZE_T)~0U, Format, Args);
+}
+
 LONG RtlpStrWCount
 (
 	PCWSTR String

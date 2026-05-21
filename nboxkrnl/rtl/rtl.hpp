@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <nanoprintf.h>
 #include "..\types.hpp"
 #include "seh.hpp"
 #include "io.hpp"
@@ -204,10 +205,8 @@ EXPORTNUM(285) DLLEXPORT VOID XBOXAPI RtlFillMemoryUlong
 	ULONG Pattern
 );
 
-EXPORTNUM(286) DLLEXPORT VOID XBOXAPI RtlFreeAnsiString
-(
-    PANSI_STRING AnsiString
-);
+EXPORTNUM(286)
+#define RtlFreeAnsiString RtlFreeUnicodeString
 
 EXPORTNUM(287) DLLEXPORT VOID XBOXAPI RtlFreeUnicodeString
 (
@@ -400,6 +399,36 @@ EXPORTNUM(320) DLLEXPORT VOID XBOXAPI RtlZeroMemory
 	PVOID ApiName,
 	PVOID Expression,
 	PVOID Message
+);
+
+EXPORTNUM(361) DLLEXPORT VOID CDECL RtlSnprintf
+(
+    CHAR *,
+    SIZE_T,
+    const CHAR *,
+    ...
+);
+
+EXPORTNUM(362) DLLEXPORT VOID CDECL RtlSprintf
+(
+    CHAR *,
+    const CHAR *,
+    ...
+);
+
+EXPORTNUM(363) DLLEXPORT VOID CDECL RtlVsnprintf
+(
+    CHAR *,
+    SIZE_T,
+    const CHAR *,
+    va_list
+);
+
+EXPORTNUM(364) DLLEXPORT VOID CDECL RtlVsprintf
+(
+    CHAR *,
+    const CHAR *,
+    va_list
 );
 
 #ifdef __cplusplus
