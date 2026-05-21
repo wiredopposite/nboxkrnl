@@ -58,6 +58,28 @@ static const EepromInfo EepromInfos[] = {
 
 static INITIALIZE_GLOBAL_CRITICAL_SECTION(ExpEepromLock);
 
+EXPORTNUM(30) OBJECT_TYPE ExSemaphoreObjectType = {
+	ExAllocatePoolWithTag,
+	ExFreePool,
+	nullptr,
+	nullptr,
+	nullptr,
+	nullptr,
+	0x616D6553
+};
+
+static VOID XBOXAPI ExpDeleteTimer(PVOID Timer);
+
+EXPORTNUM(31) OBJECT_TYPE ExTimerObjectType = {
+	ExAllocatePoolWithTag,
+	ExFreePool,
+	nullptr,
+	ExpDeleteTimer,
+	nullptr,
+	nullptr,
+	0x656D6954
+};
+
 // Source: Cxbx-Reloaded
 static const EepromInfo *ExpFindEepromInfo(XC_VALUE_INDEX Index)
 {
@@ -68,6 +90,14 @@ static const EepromInfo *ExpFindEepromInfo(XC_VALUE_INDEX Index)
 	}
 
 	return nullptr;
+}
+
+static VOID XBOXAPI ExpDeleteTimer
+(
+	PVOID Timer
+)
+{
+	KeCancelTimer((PKTIMER)Timer);
 }
 
 // Source: Cxbx-Reloaded
