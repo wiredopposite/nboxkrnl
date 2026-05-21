@@ -193,6 +193,7 @@ file (GLOB SOURCES
  "${NBOXKRNL_ROOT_DIR}/nboxkrnl/rtl/string_conversion.cpp"
  "${NBOXKRNL_ROOT_DIR}/nboxkrnl/rtl/string_lowercase.cpp"
  "${NBOXKRNL_ROOT_DIR}/nboxkrnl/rtl/string_uppercase.cpp"
+ "${NBOXKRNL_ROOT_DIR}/nboxkrnl/rtl/unicode.cpp"
  "${NBOXKRNL_ROOT_DIR}/nboxkrnl/xc/crypto.cpp"
  "${NBOXKRNL_ROOT_DIR}/nboxkrnl/xc/sha.cpp"
  "${NBOXKRNL_ROOT_DIR}/nboxkrnl/xe/xe.cpp"

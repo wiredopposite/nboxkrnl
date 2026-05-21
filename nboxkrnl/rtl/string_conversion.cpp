@@ -1,8 +1,10 @@
 /*
 * PatrickvL              Copyright (c) 2018
+* wiredopposite          Copyright (c) 2026
 */
 
 #include "rtl.hpp"
+#include "rtlp.hpp"
 #include "ex.hpp"
 
 
@@ -150,5 +152,131 @@ EXPORTNUM(299) NTSTATUS XBOXAPI RtlMultiByteToUnicodeN
 		numChars--;
 	}
 
+	return STATUS_SUCCESS;
+}
+
+EXPORTNUM(300) NTSTATUS XBOXAPI RtlMultiByteToUnicodeSize
+(
+    PULONG BytesInUnicodeString,
+    PCHAR MultiByteString,
+    ULONG BytesInMultiByteString
+)
+{
+	*BytesInUnicodeString = BytesInMultiByteString * sizeof(WCHAR);
+	return STATUS_SUCCESS;
+}
+
+EXPORTNUM(308) NTSTATUS XBOXAPI RtlUnicodeStringToAnsiString
+(
+    PSTRING DestinationString,
+    PUNICODE_STRING SourceString,
+    BOOLEAN AllocateDestinationString
+)
+{
+	NTSTATUS Status = STATUS_SUCCESS, ConvertStatus;
+	ULONG ReqMaxLen = (static_cast<ULONG>(SourceString->Length) + sizeof(WCHAR)) / sizeof(WCHAR);
+	ULONG ConvertedLen;
+
+	if (ReqMaxLen >= 0x10000) {
+		return STATUS_INVALID_PARAMETER_2;
+	}
+
+	DestinationString->Length = static_cast<USHORT>(ReqMaxLen - 1);
+
+	if (!AllocateDestinationString) {
+		if (DestinationString->Length >= DestinationString->MaximumLength) {
+			Status = STATUS_BUFFER_OVERFLOW;
+			
+			if (DestinationString->MaximumLength == 0) {
+				return Status;
+			}
+			
+			DestinationString->Length = DestinationString->MaximumLength - 1;
+		}
+	}
+	else {
+		DestinationString->MaximumLength = static_cast<USHORT>(ReqMaxLen);
+		DestinationString->Buffer = static_cast<PCHAR>(ExAllocatePoolWithTag(ReqMaxLen, RtlpPoolTag));
+		
+		if (!DestinationString->Buffer) {
+			return STATUS_NO_MEMORY;
+		}
+	}
+
+	ConvertStatus = RtlUnicodeToMultiByteN(
+		DestinationString->Buffer, 
+		DestinationString->Length, 
+		&ConvertedLen, 
+		SourceString->Buffer, 
+		SourceString->Length
+	);
+
+	if (!NT_SUCCESS(ConvertStatus)) {
+		if (AllocateDestinationString) {
+			ExFreePool(DestinationString->Buffer);
+			DestinationString->Buffer = nullptr;
+		}
+	}
+	else {
+		DestinationString->Buffer[ConvertedLen] = ANSI_NULL;
+		ConvertStatus = Status;
+	}
+
+	return ConvertStatus;
+}
+
+EXPORTNUM(309) NTSTATUS XBOXAPI RtlUnicodeStringToInteger
+(
+    PUNICODE_STRING String,
+    ULONG Base,
+    PULONG Value
+)
+{
+	RIP_UNIMPLEMENTED();
+	return STATUS_NOT_IMPLEMENTED;
+}
+
+EXPORTNUM(310) NTSTATUS XBOXAPI RtlUnicodeToMultiByteN
+(
+    PCHAR MultiByteString,
+    ULONG MaxBytesInMultiByteString,
+    PULONG BytesInMultiByteString,
+    PWSTR UnicodeString,
+    ULONG BytesInUnicodeString
+)
+{
+	ULONG NumChars = BytesInUnicodeString / sizeof(WCHAR);
+
+	if (MaxBytesInMultiByteString <= NumChars) {
+		NumChars = MaxBytesInMultiByteString;
+	}
+
+	if (BytesInMultiByteString) {
+		*BytesInMultiByteString = NumChars;
+	}
+
+	while (NumChars--) {
+		if (*UnicodeString < 0x100) {
+			*MultiByteString = static_cast<CHAR>(static_cast<UCHAR>(*UnicodeString));
+		}
+		else {
+			*MultiByteString = '?';
+		}
+
+		UnicodeString++;
+		MultiByteString++;
+	}
+
+	return STATUS_SUCCESS;
+}
+
+EXPORTNUM(311) NTSTATUS XBOXAPI RtlUnicodeToMultiByteSize
+(
+    PULONG BytesInMultiByteString,
+    PWSTR UnicodeString,
+    ULONG BytesInUnicodeString
+)
+{
+	*BytesInMultiByteString = BytesInUnicodeString / sizeof(WCHAR);
 	return STATUS_SUCCESS;
 }

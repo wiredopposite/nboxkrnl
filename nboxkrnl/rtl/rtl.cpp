@@ -2,6 +2,7 @@
  * ergo720                Copyright (c) 2023
  * Fisherman166           Copyright (c) 2018
  * PatrickvL              Copyright (c) 2018
+ * wiredopposite          Copyright (c) 2026
  */
 
 #include "rtl.hpp"
