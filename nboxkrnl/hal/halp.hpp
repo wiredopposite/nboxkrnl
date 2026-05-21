@@ -145,6 +145,7 @@ inline constexpr VOID(XBOXAPI *const SwIntHandlers[])() = {
 };
 
 [[noreturn]] VOID HalpShutdownSystem();
+[[noreturn]] VOID HalpRebootSystem();
 VOID HalpInitPIC();
 VOID HalpInitPIT();
 VOID HalpInitSMCstate();

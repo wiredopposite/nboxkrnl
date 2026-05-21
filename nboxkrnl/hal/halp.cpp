@@ -139,6 +139,24 @@ VOID HalpShutdownSystem()
 	}
 }
 
+VOID HalpRebootSystem()
+{
+	if (KeGetCurrentIrql() < DISPATCH_LEVEL) {
+		HalWriteSMBusValue(SMC_WRITE_ADDR, 2, FALSE, 1);
+	}
+
+	outb(0xcf9, 0xe);
+
+	while (true) {
+		// clang-format on
+		__asm {
+			cli
+			hlt
+		}
+		// clang-format on
+	}
+}
+
 VOID HalpExecuteReadSmbusCycle(UCHAR SlaveAddress, UCHAR CommandCode, BOOLEAN ReadWordValue)
 {
 	outb(SMBUS_ADDRESS, SlaveAddress | HA_RC);

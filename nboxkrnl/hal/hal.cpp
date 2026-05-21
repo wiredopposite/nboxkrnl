@@ -224,6 +224,50 @@ EXPORTNUM(47) VOID XBOXAPI HalRegisterShutdownNotification
 	KfLowerIrql(OldIrql);
 }
 
+[[noreturn]] EXPORTNUM(49) VOID XBOXAPI HalReturnToFirmware
+(
+    FIRMWARE_REENTRY Routine
+)
+{
+	if (Routine != HalQuickRebootRoutine) {
+		if (Routine == HalFatalErrorRebootRoutine) {
+			HalWriteSMBusValue(SMC_WRITE_ADDR, 0x1b, FALSE, 2);
+		}
+		HalpRebootSystem();
+	}
+
+	/**
+	 * The original kernel performs some steps while warm 
+	 * rebooting that we can't do yet, so for now just cold 
+	 * reboot. The main things needed are a way to recopy/overwrite 
+	 * our data section in RAM and set a persistent flag indicating 
+	 * a warm boot.
+	 */
+#if 0
+	while (TRUE) {
+	 	KIRQL OldIrql = KeRaiseIrqlToDpcLevel(); 
+		PLIST_ENTRY Entry = RemoveHeadList(&ShutdownRoutineList);
+		KfLowerIrql(OldIrql);
+
+		if (Entry == &ShutdownRoutineList) {
+			break;
+		}
+
+		HAL_SHUTDOWN_REGISTRATION* ShutdownEntry = CONTAINING_RECORD(
+			Entry, 
+			HAL_SHUTDOWN_REGISTRATION, 
+			ListEntry
+		);
+
+		ShutdownEntry->NotificationRoutine(ShutdownEntry);
+	}
+
+	KeWarmRebootSystem();
+#else
+	HalpRebootSystem();
+#endif
+}
+
 EXPORTNUM(50) NTSTATUS XBOXAPI HalWriteSMBusValue
 (
 	UCHAR SlaveAddress,

@@ -8,6 +8,7 @@
 #include "ki.hpp"
 #include "ex.hpp"
 #include "hal.hpp"
+#include "rtl.hpp"
 #include "..\kernel.hpp"
 #include "..\kernel_version.hpp"
 #include <assert.h>
@@ -204,6 +205,12 @@ VOID KeSetSystemTime(PLARGE_INTEGER NewTime, PLARGE_INTEGER OldTime)
 
 	/* Process expired timers. This releases the dispatcher and timer locks */
 	KiTimerListExpire(&TempList2, OldIrql);
+}
+
+VOID KeWarmRebootSystem()
+{
+	// TODO
+	RIP_UNIMPLEMENTED();
 }
 
 static VOID SubmitIoRequestToHost(void *RequestAddr)

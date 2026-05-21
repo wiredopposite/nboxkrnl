@@ -740,6 +740,8 @@ EXPORTNUM(321) DLLEXPORT extern XBOX_KEY_DATA XboxEEPROMKey;
 extern XBOX_KEY_DATA XboxCERTKey;
 extern ULONG KernelThunkTable[379];
 
+VOID KeWarmRebootSystem();
+
 VOID XBOXAPI KiSuspendNop(PKAPC Apc, PKNORMAL_ROUTINE *NormalRoutine, PVOID *NormalContext, PVOID *SystemArgument1, PVOID *SystemArgument2);
 VOID XBOXAPI KiSuspendThread(PVOID NormalContext, PVOID SystemArgument1, PVOID SystemArgument);
 VOID KeInitializeThread(PKTHREAD Thread, PVOID KernelStack, ULONG KernelStackSize, ULONG TlsDataSize, PKSYSTEM_ROUTINE SystemRoutine, PKSTART_ROUTINE StartRoutine,

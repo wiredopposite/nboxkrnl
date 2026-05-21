@@ -20,6 +20,15 @@
 #define DISC_TRAY_STATE_RESET 	(7u << 4)
 #define DISC_TRAY_STATE_MASK 	(7u << 4)
 
+enum FIRMWARE_REENTRY {
+    HalHaltRoutine,
+    HalRebootRoutine,
+    HalQuickRebootRoutine,
+    HalKdRebootRoutine,
+    HalFatalErrorRebootRoutine,
+    HalMaximumRoutine
+};
+
 using PHAL_SHUTDOWN_NOTIFICATION = VOID(XBOXAPI *)(
 	struct HAL_SHUTDOWN_REGISTRATION *ShutdownRegistration
 	);
@@ -82,6 +91,11 @@ EXPORTNUM(47) DLLEXPORT VOID XBOXAPI HalRegisterShutdownNotification
 EXPORTNUM(48) DLLEXPORT VOID FASTCALL HalRequestSoftwareInterrupt
 (
 	KIRQL Request
+);
+
+[[noreturn]] EXPORTNUM(49) DLLEXPORT VOID XBOXAPI HalReturnToFirmware
+(
+    FIRMWARE_REENTRY Routine
 );
 
 EXPORTNUM(50) DLLEXPORT NTSTATUS XBOXAPI HalWriteSMBusValue
