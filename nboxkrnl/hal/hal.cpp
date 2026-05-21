@@ -10,6 +10,9 @@
  // Global list of routines executed during a reboot
 static LIST_ENTRY ShutdownRoutineList = { &ShutdownRoutineList , &ShutdownRoutineList };
 
+static ULONG HalpDiscTrayChangeCount = 0;
+static ULONG HalpDiscTrayState = ~0U;
+
 EXPORTNUM(40) ULONG HalDiskCachePartitionCount = 3;
 EXPORTNUM(356) ULONG HalBootSMCVideoMode = SMC_VIDEO_MODE_NONE;
 
@@ -52,6 +55,49 @@ BOOLEAN HalInitSystem()
 	}
 
 	return TRUE;
+}
+
+EXPORTNUM(9) DLLEXPORT NTSTATUS XBOXAPI HalReadSMCTrayState
+(
+    PULONG TrayState,
+    PULONG TrayStateChangeCount
+)
+{
+	NTSTATUS Status;
+	ULONG ReadState;
+
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	ULONG CurrentState = HalpDiscTrayState;
+	ULONG ChangeCount = HalpDiscTrayChangeCount;
+	KfLowerIrql(OldIrql);
+
+	if (CurrentState == ~0U) {
+		Status = HalReadSMBusValue(SMC_READ_ADDR, SMC_DISC_TRAY_COMMAND, FALSE, &ReadState);
+		CurrentState = ReadState;
+
+		if (NT_SUCCESS(Status)) {
+			CurrentState = ReadState & DISC_TRAY_STATE_MASK;
+			if ((CurrentState != DISC_TRAY_STATE_EMPTY) && (CurrentState != DISC_TRAY_STATE_UNK2)) {
+				CurrentState = DISC_TRAY_STATE_OPEN;
+			}
+
+			OldIrql = KeRaiseIrqlToDpcLevel();
+			if (ChangeCount == HalpDiscTrayChangeCount) {
+				HalpDiscTrayState = CurrentState;
+			}
+			KfLowerIrql(OldIrql);
+		}
+	}
+	else {
+		Status = STATUS_SUCCESS;
+	}
+	
+	*TrayState = CurrentState;
+	if (TrayStateChangeCount) {
+		*TrayStateChangeCount = ChangeCount;
+	}
+
+	return Status;
 }
 
 EXPORTNUM(45) NTSTATUS XBOXAPI HalReadSMBusValue

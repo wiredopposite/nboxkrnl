@@ -8,6 +8,17 @@
 #include "ke.hpp"
 
 
+#define DISC_TRAY_STATE_CLOSED 	0
+#define DISC_TRAY_STATE_ACTIVE 	(1u << 0)
+#define DISC_TRAY_STATE_OPEN 	(1u << 4)
+#define DISC_TRAY_STATE_UNK 	(1u << 5)
+#define DISC_TRAY_STATE_OPENING	(3u << 4)
+#define DISC_TRAY_STATE_EMPTY 	(1u << 6)
+#define DISC_TRAY_STATE_CLOSING (5u << 4)
+#define DISC_TRAY_STATE_UNK2 	(3u << 5)
+#define DISC_TRAY_STATE_RESET 	(7u << 4)
+#define DISC_TRAY_STATE_MASK 	(7u << 4)
+
 using PHAL_SHUTDOWN_NOTIFICATION = VOID(XBOXAPI *)(
 	struct HAL_SHUTDOWN_REGISTRATION *ShutdownRegistration
 	);
@@ -22,6 +33,12 @@ using PHAL_SHUTDOWN_REGISTRATION = HAL_SHUTDOWN_REGISTRATION *;
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+EXPORTNUM(9) DLLEXPORT NTSTATUS XBOXAPI HalReadSMCTrayState
+(
+    PULONG TrayState,
+    PULONG TrayStateChangeCount
+);
 
 EXPORTNUM(40) DLLEXPORT extern ULONG HalDiskCachePartitionCount;
 

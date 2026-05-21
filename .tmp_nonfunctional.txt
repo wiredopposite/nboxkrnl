@@ -1,0 +1,107 @@
+C:\dev\nboxkrnl\nboxkrnl\av\av.cpp:50: #define AV_USER_FLAGS_MASK                (AV_HDTV_MODE_MASK | AV_ASPECT_RATIO_MASK | AV_REFRESH_MASK) // TODO : Should AV_REFRESH_MASK be AV_FLAGS_60Hz instead?
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\cdrom.cpp:11: IopUnimplementedDriverStartIo,         // DriverStartIo
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\cdrom.cpp:15: IopUnimplementedDeviceRequest,  // IRP_MJ_CREATE
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\cdrom.cpp:16: IopUnimplementedDeviceRequest,  // IRP_MJ_CLOSE
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\cdrom.cpp:17: IopUnimplementedDeviceRequest,  // IRP_MJ_READ
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\cdrom.cpp:25: IopUnimplementedDeviceRequest,  // IRP_MJ_DEVICE_CONTROL
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:25: IopUnimplementedDriverDismountVolume,  // DriverDismountVolume
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:32: IopUnimplementedDeviceRequest,  // IRP_MJ_SET_INFORMATION
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:34: IopUnimplementedDeviceRequest,  // IRP_MJ_QUERY_VOLUME_INFORMATION
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:35: IopUnimplementedDeviceRequest,  // IRP_MJ_DIRECTORY_CONTROL
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:36: IopUnimplementedDeviceRequest,  // IRP_MJ_FILE_SYSTEM_CONTROL
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:200: if (CreateOptions & FILE_OPEN_BY_FILE_ID) { // not supported on xiso
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:414: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\cdrom\xdvdfs.cpp:529: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:83: IopUnimplementedDriverDismountVolume,  // DriverDismountVolume
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:90: IopUnimplementedDeviceRequest,  // IRP_MJ_SET_INFORMATION
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:91: IopUnimplementedDeviceRequest,  // IRP_MJ_FLUSH_BUFFERS
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:93: IopUnimplementedDeviceRequest,  // IRP_MJ_DIRECTORY_CONTROL
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:94: IopUnimplementedDeviceRequest,  // IRP_MJ_FILE_SYSTEM_CONTROL
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:379: case FILE_DEVICE_MEMORY_UNIT: // TODO
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:380: case FILE_DEVICE_MEDIA_BOARD: // TODO
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:449: if (CreateOptions & FILE_OPEN_BY_FILE_ID) { // not supported on FAT
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:711: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:833: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\fatx.cpp:913: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\hdd.cpp:63: IopUnimplementedDriverStartIo,         // DriverStartIo
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\hdd.cpp:67: IopUnimplementedDeviceRequest,  // IRP_MJ_CREATE
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\hdd.cpp:68: IopUnimplementedDeviceRequest,  // IRP_MJ_CLOSE
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\hdd.cpp:69: IopUnimplementedDeviceRequest,  // IRP_MJ_READ
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\hdd.cpp:70: IopUnimplementedDeviceRequest,  // IRP_MJ_WRITE
+C:\dev\nboxkrnl\nboxkrnl\io\hdd\hdd.cpp:73: IopUnimplementedDeviceRequest,  // IRP_MJ_FLUSH_BUFFERS
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:22: IopUnimplementedDriverDismountVolume,  // DriverDismountVolume
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:28: IopUnimplementedDeviceRequest,  // IRP_MJ_QUERY_INFORMATION
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:29: IopUnimplementedDeviceRequest,  // IRP_MJ_SET_INFORMATION
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:30: IopUnimplementedDeviceRequest,  // IRP_MJ_FLUSH_BUFFERS
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:31: IopUnimplementedDeviceRequest,  // IRP_MJ_QUERY_VOLUME_INFORMATION
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:33: IopUnimplementedDeviceRequest,  // IRP_MJ_FILE_SYSTEM_CONTROL
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:99: case FILE_DEVICE_MEDIA_BOARD: // TODO
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:172: // Files and directories don't exist on a raw fs, so all relative operations are not supported
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:247: case FILE_DEVICE_MEDIA_BOARD: // TODO
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:288: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:316: case FILE_DEVICE_MEDIA_BOARD: // TODO
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:362: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\raw\raw.cpp:385: if (TargetDeviceObject->DeviceType == FILE_DEVICE_MEDIA_BOARD) { // TODO
+C:\dev\nboxkrnl\nboxkrnl\io\fsc.cpp:314: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:155: RIP_API_MSG("Mounting MUs is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:158: RIP_API_MSG("Mounting the media board is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:500: // TODO: does this need to lock the pages of the OutputBuffer?
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:530: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:660: VOID XBOXAPI IopUnimplementedDriverStartIo(DEVICE_OBJECT *DeviceObject, IRP *Irp)
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:668: VOID XBOXAPI IopUnimplementedDriverDeleteDevice(DEVICE_OBJECT *DeviceObject)
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:675: NTSTATUS XBOXAPI IopUnimplementedDriverDismountVolume(DEVICE_OBJECT *DeviceObject)
+C:\dev\nboxkrnl\nboxkrnl\io\iop.cpp:682: NTSTATUS XBOXAPI IopUnimplementedDeviceRequest(DEVICE_OBJECT *DeviceObject, IRP *Irp)
+C:\dev\nboxkrnl\nboxkrnl\io\iop.hpp:705: VOID XBOXAPI IopUnimplementedDriverStartIo(DEVICE_OBJECT *DeviceObject, IRP *Irp);
+C:\dev\nboxkrnl\nboxkrnl\io\iop.hpp:706: VOID XBOXAPI IopUnimplementedDriverDeleteDevice(DEVICE_OBJECT *DeviceObject);
+C:\dev\nboxkrnl\nboxkrnl\io\iop.hpp:707: NTSTATUS XBOXAPI IopUnimplementedDriverDismountVolume(DEVICE_OBJECT *DeviceObject);
+C:\dev\nboxkrnl\nboxkrnl\io\iop.hpp:708: NTSTATUS XBOXAPI IopUnimplementedDeviceRequest(DEVICE_OBJECT *DeviceObject, IRP *Irp);
+C:\dev\nboxkrnl\nboxkrnl\ke\kernel.cpp:219: // TODO: instead of polling the IO like this, the host should signal I/O completion by raising a HDD interrupt, so that we can handle the event in the ISR
+C:\dev\nboxkrnl\nboxkrnl\ke\queue.cpp:65: // TODO
+C:\dev\nboxkrnl\nboxkrnl\ke\queue.cpp:66: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ke\thunk.cpp:325: (ULONG)FUNC(&RtlNtStatusToDosError),                   // 0x012D (301)
+C:\dev\nboxkrnl\nboxkrnl\ke\timer.cpp:310: RIP_API_MSG("Unwaiting threads is not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:77: RIP_API_MSG("Thread alerts are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:98: RIP_API_MSG("Thread queues are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:112: RIP_API_MSG("User APCs are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:133: RIP_API_MSG("User APCs are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:198: RIP_API_MSG("Thread alerts are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:231: RIP_API_MSG("Thread queues are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:245: RIP_API_MSG("User APCs are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:265: RIP_API_MSG("User APCs are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:290: RIP_API_MSG("Mutant objects are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ke\wait.cpp:325: RIP_API_MSG("Thread queues are not supported");
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:36: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:41: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:46: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:51: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:56: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:61: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:105: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:110: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:115: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:120: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:125: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:148: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:153: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:158: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:163: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\hw_exp.cpp:169: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ki\ki.cpp:61: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\nt\file.cpp:83: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\nt\file.cpp:169: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\nt\file.cpp:252: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\nt\file.cpp:289: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\nt\file.cpp:350: RIP_API_MSG("Asynchronous IO is not supported");
+C:\dev\nboxkrnl\nboxkrnl\nt\memory.cpp:333: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\nt\memory.cpp:346: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\ob\ob.cpp:337: // NOTE: on the xbox, NtCurrentProcess is not supported
+C:\dev\nboxkrnl\nboxkrnl\ob\obp.cpp:396: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\rtl\error.cpp:21: EXPORTNUM(301) DLLEXPORT ULONG XBOXAPI RtlNtStatusToDosError
+C:\dev\nboxkrnl\nboxkrnl\rtl\rtl.hpp:277: EXPORTNUM(301) DLLEXPORT ULONG XBOXAPI RtlNtStatusToDosError
+C:\dev\nboxkrnl\nboxkrnl\rtl\rtl.hpp:440: #define RIP_UNIMPLEMENTED() RtlRip(const_cast<PCHAR>(__func__), nullptr, const_cast<PCHAR>("unimplemented!"))
+C:\dev\nboxkrnl\nboxkrnl\rtl\string_conversion.cpp:235: RIP_UNIMPLEMENTED();
+C:\dev\nboxkrnl\nboxkrnl\xe\xe.cpp:40: // TODO: XBE reboot support, by reading the path of the new XBE from the LaunchDataPage
+C:\dev\nboxkrnl\nboxkrnl\xe\xe.cpp:41: RIP_API_MSG("XBE reboot not supported");
+C:\dev\nboxkrnl\nboxkrnl\xe\xe.cpp:142: // Disable security checks. TODO: is this necessary?
+C:\dev\nboxkrnl\nboxkrnl\xe\xe.cpp:189: // TODO: extract the keys from the certificate and store them in XboxLANKey, XboxSignatureKey and XboxAlternateSignatureKeys
+C:\dev\nboxkrnl\nboxkrnl\xe\xe.cpp:201: // TODO: this should probably either reboot to the dashboard with an error setting, or display the fatal error message to the screen

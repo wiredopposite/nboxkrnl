@@ -83,6 +83,9 @@
 #define SMC_VIDEO_MODE_STANDARD  0x06
 #define SMC_VIDEO_MODE_NONE      0x07
 
+// SMC disc tray command
+#define SMC_DISC_TRAY_COMMAND 0x03
+
 
 inline KDPC HalpSmbusDpcObject;
 inline struct SMBUS_CYCLE_INFO {
