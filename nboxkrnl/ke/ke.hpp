@@ -452,6 +452,17 @@ using PKINTERRUPT = KINTERRUPT *;
 extern "C" {
 #endif
 
+EXPORTNUM(92) DLLEXPORT ULONG XBOXAPI KeAlertResumeThread
+(
+    PKTHREAD Thread
+);
+
+EXPORTNUM(93) DLLEXPORT BOOLEAN XBOXAPI KeAlertThread
+(
+    PKTHREAD Thread,
+    KPROCESSOR_MODE ProcessorMode
+);
+
 [[noreturn]] EXPORTNUM(95) DLLEXPORT VOID XBOXAPI KeBugCheck
 (
 	ULONG BugCheckCode

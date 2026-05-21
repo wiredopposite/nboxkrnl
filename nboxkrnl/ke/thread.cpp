@@ -442,6 +442,61 @@ NTSTATUS __declspec(naked) XBOXAPI KiSwapThread()
 	// clang-format on
 }
 
+EXPORTNUM(92) ULONG XBOXAPI KeAlertResumeThread
+(
+    PKTHREAD Thread
+)
+{
+	assert(KeGetCurrentIrql() <= DISPATCH_LEVEL);
+	assert(Thread != nullptr);
+
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	
+	if (!Thread->Alerted[KernelMode]) {
+		if ((Thread->State == Waiting) && Thread->Alertable) {
+			KiUnwaitThread(Thread, STATUS_ALERTED, 2);
+		}
+		else {
+			Thread->Alerted[KernelMode] = TRUE;
+		}
+	}
+
+	UCHAR Count = Thread->SuspendCount;
+
+	if (Count && (--Thread->SuspendCount == 0)) {
+		Thread->SuspendSemaphore.Header.SignalState++;
+		KiWaitTest(&Thread->SuspendSemaphore, 0);
+	}
+
+	KiUnlockDispatcherDatabase(OldIrql);
+	return Count;
+}
+
+EXPORTNUM(93) BOOLEAN XBOXAPI KeAlertThread
+(
+    PKTHREAD Thread,
+    KPROCESSOR_MODE ProcessorMode
+)
+{
+	assert(KeGetCurrentIrql() <= DISPATCH_LEVEL);
+	assert(Thread != nullptr);
+
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	BOOLEAN Alerted = Thread->Alerted[ProcessorMode];
+
+	if (!Alerted) {
+		if ((Thread->State == Waiting) && Thread->Alertable && (ProcessorMode <= Thread->WaitMode)) {
+			KiUnwaitThread(Thread, STATUS_ALERTED, 2);
+		}
+		else {
+			Thread->Alerted[ProcessorMode] = TRUE;
+		}
+	}
+
+	KiUnlockDispatcherDatabase(OldIrql);
+	return Alerted;
+}
+
 EXPORTNUM(104) PKTHREAD XBOXAPI KeGetCurrentThread()
 {
 	// clang-format off
@@ -454,6 +509,9 @@ EXPORTNUM(140) ULONG XBOXAPI KeResumeThread
 	PKTHREAD Thread
 )
 {
+	assert(KeGetCurrentIrql() <= DISPATCH_LEVEL);
+	assert(Thread != nullptr);
+
 	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
 	ULONG Count = Thread->SuspendCount;
 
@@ -474,6 +532,9 @@ EXPORTNUM(148) KPRIORITY XBOXAPI KeSetPriorityThread
 	LONG Priority
 )
 {
+	assert(KeGetCurrentIrql() <= DISPATCH_LEVEL);
+	assert(Thread != nullptr);
+
 	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
 	KPRIORITY OldPriority = Thread->Priority;
 	Thread->Quantum = Thread->ApcState.Process->ThreadQuantum;
@@ -488,6 +549,9 @@ EXPORTNUM(152) ULONG XBOXAPI KeSuspendThread
 	PKTHREAD Thread
 )
 {
+	assert(KeGetCurrentIrql() <= DISPATCH_LEVEL);
+	assert(Thread != nullptr);
+
 	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
 	ULONG Count = Thread->SuspendCount;
 
@@ -513,6 +577,8 @@ EXPORTNUM(155) BOOLEAN XBOXAPI KeTestAlertThread
 	KPROCESSOR_MODE AlertMode
 )
 {
+	assert(KeGetCurrentIrql() <= DISPATCH_LEVEL);
+	
 	PKTHREAD Thread = KeGetCurrentThread();
 	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
 	BOOLEAN Alerted = Thread->Alerted[AlertMode];
