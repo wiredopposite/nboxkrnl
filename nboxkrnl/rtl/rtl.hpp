@@ -54,6 +54,12 @@ EXPORTNUM(262) DLLEXPORT NTSTATUS XBOXAPI RtlAppendUnicodeStringToString
 	PUNICODE_STRING Source
 );
 
+EXPORTNUM(263) DLLEXPORT NTSTATUS XBOXAPI RtlAppendUnicodeToString
+(
+    PUNICODE_STRING Destination,
+    PCWSTR Source
+);
+
 EXPORTNUM(264) DLLEXPORT VOID XBOXAPI RtlAssert
 (
 	PVOID FailedAssertion,
@@ -103,10 +109,41 @@ EXPORTNUM(270) DLLEXPORT LONG XBOXAPI RtlCompareString
 	BOOLEAN CaseInSensitive
 );
 
+EXPORTNUM(271) DLLEXPORT LONG XBOXAPI RtlCompareUnicodeString
+(
+    PUNICODE_STRING String1,
+    PUNICODE_STRING String2,
+    BOOLEAN CaseInSensitive
+);
+
 EXPORTNUM(272) DLLEXPORT VOID XBOXAPI RtlCopyString
 (
 	PSTRING DestinationString,
 	PSTRING SourceString
+);
+
+EXPORTNUM(273) DLLEXPORT VOID XBOXAPI RtlCopyUnicodeString
+(
+    PUNICODE_STRING DestinationString,
+    PUNICODE_STRING SourceString
+);
+
+EXPORTNUM(274) DLLEXPORT BOOLEAN XBOXAPI RtlCreateUnicodeString
+(
+    PUNICODE_STRING DestinationString,
+    PCWSTR SourceString
+);
+
+EXPORTNUM(275) DLLEXPORT WCHAR XBOXAPI RtlDowncaseUnicodeChar
+(
+    WCHAR SourceCharacter
+);
+
+EXPORTNUM(276) DLLEXPORT NTSTATUS XBOXAPI RtlDowncaseUnicodeString
+(
+    PUNICODE_STRING DestinationString,
+    PUNICODE_STRING SourceString,
+    BOOLEAN AllocateDestinationString
 );
 
 EXPORTNUM(277) DLLEXPORT VOID XBOXAPI RtlEnterCriticalSection
@@ -124,6 +161,13 @@ EXPORTNUM(279) DLLEXPORT BOOLEAN XBOXAPI RtlEqualString
 	PSTRING String1,
 	PSTRING String2,
 	BOOLEAN CaseInSensitive
+);
+
+EXPORTNUM(280) DLLEXPORT BOOLEAN XBOXAPI RtlEqualUnicodeString
+(
+    const PUNICODE_STRING String1,
+    const PUNICODE_STRING String2,
+    BOOLEAN CaseInSensitive
 );
 
 EXPORTNUM(281) DLLEXPORT LARGE_INTEGER XBOXAPI RtlExtendedIntegerMultiply
@@ -160,6 +204,11 @@ EXPORTNUM(285) DLLEXPORT VOID XBOXAPI RtlFillMemoryUlong
 	ULONG Pattern
 );
 
+EXPORTNUM(286) DLLEXPORT VOID XBOXAPI RtlFreeAnsiString
+(
+    PANSI_STRING AnsiString
+);
+
 EXPORTNUM(287) DLLEXPORT VOID XBOXAPI RtlFreeUnicodeString
 (
 	PUNICODE_STRING UnicodeString
@@ -169,6 +218,12 @@ EXPORTNUM(289) DLLEXPORT VOID XBOXAPI RtlInitAnsiString
 (
 	PANSI_STRING DestinationString,
 	PCSZ SourceString
+);
+
+EXPORTNUM(290) DLLEXPORT VOID XBOXAPI RtlInitUnicodeString
+(
+    PUNICODE_STRING DestinationString,
+    PCWSTR SourceString
 );
 
 EXPORTNUM(291) DLLEXPORT VOID XBOXAPI RtlInitializeCriticalSection
@@ -213,6 +268,13 @@ EXPORTNUM(299) DLLEXPORT NTSTATUS XBOXAPI RtlMultiByteToUnicodeN
 	ULONG BytesInMultiByteString
 );
 
+EXPORTNUM(300) DLLEXPORT NTSTATUS XBOXAPI RtlMultiByteToUnicodeSize
+(
+    PULONG BytesInUnicodeString,
+    PCHAR MultiByteString,
+    ULONG BytesInMultiByteString
+);
+
 EXPORTNUM(301) DLLEXPORT ULONG XBOXAPI RtlNtStatusToDosError
 (
 	NTSTATUS Status
@@ -243,6 +305,36 @@ EXPORTNUM(305) DLLEXPORT VOID XBOXAPI RtlTimeToTimeFields
 EXPORTNUM(307) DLLEXPORT ULONG FASTCALL RtlUlongByteSwap
 (
 	ULONG Source
+);
+
+EXPORTNUM(308) DLLEXPORT NTSTATUS XBOXAPI RtlUnicodeStringToAnsiString
+(
+    PSTRING DestinationString,
+    PUNICODE_STRING SourceString,
+    BOOLEAN AllocateDestinationString
+);
+
+EXPORTNUM(309) DLLEXPORT NTSTATUS XBOXAPI RtlUnicodeStringToInteger
+(
+    PUNICODE_STRING String,
+    ULONG Base,
+    PULONG Value
+);
+
+EXPORTNUM(310) DLLEXPORT NTSTATUS XBOXAPI RtlUnicodeToMultiByteN
+(
+    PCHAR MultiByteString,
+    ULONG MaxBytesInMultiByteString,
+    PULONG BytesInMultiByteString,
+    PWSTR UnicodeString,
+    ULONG BytesInUnicodeString
+);
+
+EXPORTNUM(311) DLLEXPORT NTSTATUS XBOXAPI RtlUnicodeToMultiByteSize
+(
+    PULONG BytesInMultiByteString,
+    PWSTR UnicodeString,
+    ULONG BytesInUnicodeString
 );
 
 EXPORTNUM(312) DLLEXPORT VOID XBOXAPI RtlUnwind

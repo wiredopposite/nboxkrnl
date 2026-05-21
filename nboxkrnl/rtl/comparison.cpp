@@ -1,9 +1,10 @@
 /*
 * PatrickvL              Copyright (c) 2016
+* wiredopposite          Copyright (c) 2026
 */
 
 #include "rtl.hpp"
-//#include <string.h>
+#include "rtlp.hpp"
 
 
 // Source: Cxbx-Reloaded
@@ -84,6 +85,46 @@ EXPORTNUM(270) LONG XBOXAPI RtlCompareString
 	return l1 - l2;
 }
 
+EXPORTNUM(271) LONG XBOXAPI RtlCompareUnicodeString
+(
+    PUNICODE_STRING String1,
+    PUNICODE_STRING String2,
+    BOOLEAN CaseInSensitive
+)
+{
+	PWCHAR Str1 = String1->Buffer, Str2 = String2->Buffer;
+	LONG Len1 = String1->Length, Len2 = String2->Length;
+	PWCHAR End = (PWCHAR)((PBYTE)Str1 + (Len1 < Len2 ? Len1 : Len2));
+
+	if (!CaseInSensitive) {
+		while (Str1 < End) {
+			if (*Str1 != *Str2) {
+				return (LONG)*Str1 - (LONG)*Str2;
+			}
+
+			Str1++;
+			Str2++;
+		}
+	}
+	else {
+		WCHAR Char1, Char2;
+
+		while (Str1 < End) {
+			Char1 = RtlpUpperWChar(*Str1);
+			Char2 = RtlpUpperWChar(*Str2);
+
+			if (Char1 != Char2) {
+				return (LONG)Char1 - (LONG)Char2;
+			}
+
+			Str1++;
+			Str2++;
+		}
+	}
+
+	return Len1 - Len2;
+}
+
 // Source: Cxbx-Reloaded
 EXPORTNUM(279) BOOLEAN XBOXAPI RtlEqualString
 (
@@ -128,4 +169,44 @@ EXPORTNUM(279) BOOLEAN XBOXAPI RtlEqualString
 	}
 
 	return bRet;
+}
+
+EXPORTNUM(280) BOOLEAN XBOXAPI RtlEqualUnicodeString
+(
+    const PUNICODE_STRING String1,
+    const PUNICODE_STRING String2,
+    BOOLEAN CaseInSensitive
+)
+{
+	USHORT Len1 = String1->Length, Len2 = String2->Length;
+	PWCHAR Str1 = String1->Buffer, Str2 = String2->Buffer;
+	PWCHAR End = (PWCHAR)((PBYTE)Str1 + (Len1 < Len2 ? Len1 : Len2));
+
+	if (Len1 != Len2) {
+		return FALSE;
+	}
+
+	if (CaseInSensitive) {
+		WCHAR Char1, Char2;
+		WCHAR UpperChar1, UpperChar2;
+
+		while (Str1 < End) {
+			Char1 = *Str1++;
+			Char2 = *Str2++;
+			UpperChar1 = RtlpUpperWChar(Char1);
+			UpperChar2 = RtlpUpperWChar(Char2);
+
+			if ((Char1 != Char2) && (UpperChar1 != UpperChar2)) {
+				return FALSE;
+			}
+		}
+	} else {
+		while (Str1 < End) {
+			if (*Str1++ != *Str2++) {
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
 }

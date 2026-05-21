@@ -54,6 +54,7 @@ using PCHAR = CHAR *;
 using PBYTE = BYTE *;
 using PWCHAR = WCHAR *;
 using PWSTR = PWCHAR;
+using PCWSTR = const WCHAR *;
 using PUSHORT = USHORT *;
 using PULONG = ULONG *;
 using PULONGLONG = ULONGLONG *;

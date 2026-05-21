@@ -2,6 +2,7 @@
  * ergo720                Copyright (c) 2023
  * Fisherman166           Copyright (c) 2018
  * PatrickvL              Copyright (c) 2018
+ * wiredopposite          Copyright (c) 2026
  */
 
 #include "rtl.hpp"
@@ -316,6 +317,14 @@ EXPORTNUM(285) VOID XBOXAPI RtlFillMemoryUlong
 	for (unsigned i = 0; i < NumOfRepeats; ++i) {
 		d[i] = Pattern; // copy an ULONG at a time
 	}
+}
+
+EXPORTNUM(286) VOID XBOXAPI RtlFreeAnsiString
+(
+    PANSI_STRING AnsiString
+)
+{
+	RtlFreeUnicodeString((PUNICODE_STRING)AnsiString);
 }
 
 // Source: Cxbx-Reloaded
