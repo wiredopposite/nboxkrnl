@@ -64,6 +64,7 @@ EXPORTNUM(136) PLIST_ENTRY XBOXAPI KeRemoveQueue
 {
     // TODO
     RIP_UNIMPLEMENTED();
+    return nullptr;
 }
 
 LONG FASTCALL KiInsertQueue
