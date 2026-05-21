@@ -70,7 +70,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)FUNC(&HalReadWritePCISpace),                    // 0x002E (46)
 	(ULONG)FUNC(&HalRegisterShutdownNotification),         // 0x002F (47)
 	(ULONG)FUNC(&HalRequestSoftwareInterrupt),             // 0x0030 (48)
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&HalReturnToFirmware),                     // 0x0031 (49)
+	(ULONG)FUNC(&HalReturnToFirmware),                     // 0x0031 (49)
 	(ULONG)FUNC(&HalWriteSMBusValue),                      // 0x0032 (50)
 	(ULONG)FUNC(&InterlockedCompareExchange),        // 0x0033 (51)
 	(ULONG)FUNC(&InterlockedDecrement),              // 0x0034 (52)
@@ -142,7 +142,7 @@ ULONG KernelThunkTable[379] =
 	(ULONG)FUNC(&KeInsertQueueApc),                        // 0x0076 (118)
 	(ULONG)FUNC(&KeInsertQueueDpc),                        // 0x0077 (119)
 	(ULONG)VARIABLE(&KeInterruptTime),                     // 0x0078 (120) KeInterruptTime
-	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeIsExecutingDpc),                        // 0x0079 (121)
+	(ULONG)FUNC(&KeIsExecutingDpc),                        // 0x0079 (121)
 	(ULONG)FUNC(&KeLeaveCriticalRegion),                   // 0x007A (122)
 	(ULONG)FUNC(&KePulseEvent),                            // 0x007B (123)
 	(ULONG)FUNC(nullptr), //(ULONG)FUNC(&KeQueryBasePriorityThread),               // 0x007C (124)

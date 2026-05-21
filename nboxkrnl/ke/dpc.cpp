@@ -49,6 +49,11 @@ EXPORTNUM(119) BOOLEAN XBOXAPI KeInsertQueueDpc
 	return Inserted == FALSE;
 }
 
+EXPORTNUM(121) DLLEXPORT BOOLEAN XBOXAPI KeIsExecutingDpc()
+{
+	return KiPcr.PrcbData.DpcRoutineActive;
+}
+
 // Source: Cxbx-Reloaded
 VOID XBOXAPI KiExecuteDpcQueue()
 {
