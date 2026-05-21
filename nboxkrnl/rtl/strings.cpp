@@ -80,14 +80,6 @@ EXPORTNUM(274) BOOLEAN XBOXAPI RtlCreateUnicodeString
 	return FALSE;
 }
 
-EXPORTNUM(286) VOID XBOXAPI RtlFreeAnsiString
-(
-    PANSI_STRING AnsiString
-)
-{
-
-}
-
 // Source: Cxbx-Reloaded
 EXPORTNUM(289) VOID XBOXAPI RtlInitAnsiString
 (

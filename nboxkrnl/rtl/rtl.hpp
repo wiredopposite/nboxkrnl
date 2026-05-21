@@ -345,6 +345,27 @@ EXPORTNUM(312) DLLEXPORT VOID XBOXAPI RtlUnwind
 	PVOID ReturnValue
 );
 
+EXPORTNUM(313) DLLEXPORT WCHAR XBOXAPI RtlUpcaseUnicodeChar
+(
+    WCHAR SourceCharacter
+);
+
+EXPORTNUM(314) DLLEXPORT NTSTATUS XBOXAPI RtlUpcaseUnicodeString
+(
+    PUNICODE_STRING DestinationString,
+    PCUNICODE_STRING SourceString,
+    BOOLEAN AllocateDestinationString
+);
+
+EXPORTNUM(315) DLLEXPORT NTSTATUS XBOXAPI RtlUpcaseUnicodeToMultiByteN
+(
+    PCHAR MultiByteString,
+    ULONG MaxBytesInMultiByteString,
+    PULONG BytesInMultiByteString,
+    PWSTR UnicodeString,
+    ULONG BytesInUnicodeString
+);
+
 EXPORTNUM(316) DLLEXPORT CHAR XBOXAPI RtlUpperChar
 (
 	CHAR Character
