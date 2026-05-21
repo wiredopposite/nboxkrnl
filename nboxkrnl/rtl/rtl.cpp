@@ -319,14 +319,6 @@ EXPORTNUM(285) VOID XBOXAPI RtlFillMemoryUlong
 	}
 }
 
-EXPORTNUM(286) VOID XBOXAPI RtlFreeAnsiString
-(
-    PANSI_STRING AnsiString
-)
-{
-	RtlFreeUnicodeString((PUNICODE_STRING)AnsiString);
-}
-
 // Source: Cxbx-Reloaded
 EXPORTNUM(287) VOID XBOXAPI RtlFreeUnicodeString
 (
