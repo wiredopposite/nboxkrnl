@@ -55,15 +55,17 @@ EXPORTNUM(117) LONG XBOXAPI KeInsertQueue
     return State;
 }
 
-// EXPORTNUM(136) PLIST_ENTRY XBOXAPI KeRemoveQueue
-// (
-//     PKQUEUE Queue,
-//     KPROCESSOR_MODE WaitMode,
-//     PLARGE_INTEGER Timeout
-// )
-// {
-
-// }
+EXPORTNUM(136) PLIST_ENTRY XBOXAPI KeRemoveQueue
+(
+    PKQUEUE Queue,
+    KPROCESSOR_MODE WaitMode,
+    PLARGE_INTEGER Timeout
+)
+{
+    // TODO
+    RIP_UNIMPLEMENTED();
+    return nullptr;
+}
 
 LONG FASTCALL KiInsertQueue
 (
