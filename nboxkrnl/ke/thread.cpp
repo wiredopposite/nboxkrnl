@@ -19,8 +19,8 @@ VOID XBOXAPI KiSuspendNop(PKAPC Apc, PKNORMAL_ROUTINE *NormalRoutine, PVOID *Nor
 
 VOID XBOXAPI KiSuspendThread(PVOID NormalContext, PVOID SystemArgument1, PVOID SystemArgument)
 {
-	// TODO
-	RIP_UNIMPLEMENTED();
+	PKTHREAD Thread = KeGetCurrentThread();
+	KeWaitForSingleObject(&Thread->SuspendSemaphore, Suspended, KernelMode, FALSE, nullptr);
 }
 
 [[noreturn]] static VOID __declspec(naked) XBOXAPI KiThreadStartup()
@@ -454,9 +454,18 @@ EXPORTNUM(140) ULONG XBOXAPI KeResumeThread
 	PKTHREAD Thread
 )
 {
-	RIP_UNIMPLEMENTED();
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	ULONG Count = Thread->SuspendCount;
 
-	return 1;
+	if (Count) {
+		if (--Thread->SuspendCount == 0) {
+			Thread->SuspendSemaphore.Header.SignalState++;
+			KiWaitTest(&Thread->SuspendSemaphore, FALSE);
+		}
+	}
+
+	KiUnlockDispatcherDatabase(OldIrql);
+	return Count;
 }
 
 EXPORTNUM(148) KPRIORITY XBOXAPI KeSetPriorityThread
@@ -479,9 +488,24 @@ EXPORTNUM(152) ULONG XBOXAPI KeSuspendThread
 	PKTHREAD Thread
 )
 {
-	RIP_UNIMPLEMENTED();
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	ULONG Count = Thread->SuspendCount;
 
-	return 0;
+	if (Count == MAX_SUSPEND_COUNT) {
+		KiUnlockDispatcherDatabase(OldIrql);
+		ExRaiseStatus(STATUS_SUSPEND_COUNT_EXCEEDED);
+	}
+
+	if (Thread->ApcState.ApcQueueable) {
+		Thread->SuspendCount++;
+
+		if (Count == 0) {
+			Thread->SuspendSemaphore.Header.SignalState--;
+		}
+	}
+
+	KiUnlockDispatcherDatabase(OldIrql);
+	return Count;
 }
 
 EXPORTNUM(155) BOOLEAN XBOXAPI KeTestAlertThread
@@ -489,10 +513,22 @@ EXPORTNUM(155) BOOLEAN XBOXAPI KeTestAlertThread
 	KPROCESSOR_MODE AlertMode
 )
 {
-	// TODO
-	RIP_UNIMPLEMENTED();
+	PKTHREAD Thread = KeGetCurrentThread();
+	KIRQL OldIrql = KeRaiseIrqlToDpcLevel();
+	BOOLEAN Alerted = Thread->Alerted[AlertMode];
 
-	return FALSE;
+	if (Alerted) {
+		Thread->Alerted[AlertMode] = FALSE;
+	}
+	else if (AlertMode == UserMode) {
+		PLIST_ENTRY UserApcListHead = &Thread->ApcState.ApcListHead[UserMode];
+		if (UserApcListHead->Flink != UserApcListHead) {
+			Thread->ApcState.UserApcPending = TRUE;
+		}
+	}
+
+	KiUnlockDispatcherDatabase(OldIrql);
+	return Alerted;
 }
 
 VOID FASTCALL KiReadyThread

@@ -331,6 +331,50 @@ EXPORTNUM(150) BOOLEAN XBOXAPI KeSetTimerEx
 
 VOID XBOXAPI KiTimerExpiration(PKDPC Dpc, PVOID DeferredContext, PVOID SystemArgument1, PVOID SystemArgument2)
 {
-	// TODO
-	RIP_UNIMPLEMENTED();
+	ULONG Index, Limit;
+	ULONG CurrentTimeLow, CurrentTimeHigh;
+	ULONG TickCount;
+	ULONG ArgTimeLow = (ULONG)(ULONG_PTR)SystemArgument1;
+	LIST_ENTRY ExpiredList;
+	PLIST_ENTRY ListHead;
+	ULARGE_INTEGER CurrentTime;
+
+	CurrentTime.QuadPart = KeQueryInterruptTime();
+	CurrentTimeLow = CurrentTime.LowPart;
+	CurrentTimeHigh = CurrentTime.HighPart;
+
+	TickCount = KeTickCount;
+	Limit = TickCount;
+
+	if ((TickCount - ArgTimeLow) < TIMER_TABLE_SIZE) {
+		Index = (ArgTimeLow - 1) & (TIMER_TABLE_SIZE - 1);
+		Limit &= (TIMER_TABLE_SIZE - 1);
+	}
+	else {
+		Index = ~0UL;
+		Limit = TIMER_TABLE_SIZE - 1;
+	}
+
+	InitializeListHead(&ExpiredList);
+
+	do {
+		Index = (Index + 1) & (TIMER_TABLE_SIZE - 1);
+		ListHead = &KiTimerTableListHead[Index];
+
+		while (ListHead->Flink != ListHead) {
+			PKTIMER Timer = CONTAINING_RECORD(ListHead->Flink, KTIMER, TimerListEntry);
+
+			if (Timer->DueTime.HighPart > CurrentTimeHigh) {
+				break;
+			}
+			if ((Timer->DueTime.HighPart == CurrentTimeHigh) && (Timer->DueTime.LowPart > CurrentTimeLow)) {
+				break;
+			}
+
+			RemoveEntryList(&Timer->TimerListEntry);
+			InsertTailList(&ExpiredList, &Timer->TimerListEntry);
+		}
+	} while (Index != Limit);
+
+	KiTimerListExpire(&ExpiredList, DISPATCH_LEVEL);
 }
